@@ -14,9 +14,7 @@ fi
 CMD="gcloud compute tpus tpu-vm create tpu-$1 \
 --zone $zone \
 --accelerator-type $tpu \
---version tpu-vm-base \
---metadata=startup-script=startup.sh
-"
+--version tpu-vm-base"
 echo "$CMD"
 
 until $CMD
