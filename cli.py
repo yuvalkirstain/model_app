@@ -124,6 +124,17 @@ def run_app(tpu_name: str, zone: str, username="yuvalkirstain"):
     )
 
 
+@app.command()
+def run_app_on_all_machines():
+    for zone in ZONES:
+        print(f"Zone {zone}:")
+        tpu_names = get_valid_tpu_names(zone)
+        for tpu_name in tpu_names:
+            print(f"Running on {tpu_name}")
+            run_app(tpu_name, zone)
+            print(f"Done running on {tpu_name}")
+
+
 def get_external_ip_of_tpu(tpu_name: str, zone: str):
     cmd = f"gcloud compute tpus tpu-vm describe {tpu_name} --zone {zone} --format json"
     tpu_info = json.loads(os_call(cmd))
