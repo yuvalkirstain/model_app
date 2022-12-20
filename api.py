@@ -83,14 +83,16 @@ def generate_image(gen_image: GenImage):
     neg_prompt_ids = shard(neg_prompt_ids)
 
     seed = random.randint(0, 2147483647)
+    n_steps = random.randint(20, 40)
+    gs = random.uniform(6, 12)
     rng = create_key(seed)
     rng = jax.random.split(rng, jax.device_count())
     images = pipeline(
         prompt_ids=prompt_ids,
         params=p_params,
         prng_seed=rng,
-        num_inference_steps=N_STEPS,
-        guidance_scale=GS,
+        num_inference_steps=n_steps,
+        guidance_scale=gs,
         neg_prompt_ids=neg_prompt_ids,
         jit=True
     )[0]
@@ -107,8 +109,8 @@ def generate_image(gen_image: GenImage):
         "prompt": [gen_image.prompt] * num_images,
         "negative_prompt": [gen_image.negative_prompt] * num_images,
         "seed": seed,
-        "gs": GS,
-        "steps": N_STEPS,
+        "gs": gs,
+        "steps": n_steps,
         "idx": [i for i in range(num_images)],
         "num_generated": num_images,
         "scheduler_cls": scheduler.__class__.__name__,
