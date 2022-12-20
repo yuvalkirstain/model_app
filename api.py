@@ -14,7 +14,6 @@ from PIL import Image
 from diffusers import FlaxDPMSolverMultistepScheduler, FlaxStableDiffusionPipeline
 from pydantic import BaseModel
 
-
 MODEL_ID = "stabilityai/stable-diffusion-2-1"
 N_STEPS = 25
 GS = 9.0
@@ -35,6 +34,7 @@ pipeline, params = FlaxStableDiffusionPipeline.from_pretrained(
     dtype=jnp.bfloat16,
 )
 params["scheduler"] = scheduler_params
+p_params = replicate(params)
 
 
 class GenImage(BaseModel):
@@ -55,12 +55,16 @@ def create_key(seed=0):
     return jax.random.PRNGKey(seed)
 
 
+def image2bytes(image):
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format="PNG")
+    return base64.b64encode(img_byte_arr.getvalue())
+
+
 def images2bytes(images):
     images_bytes = []
     for image in images:
-        img_byte_arr = io.BytesIO()
-        image.save(img_byte_arr, format="PNG")
-        images_bytes.append(base64.b64encode(img_byte_arr.getvalue()))
+        images_bytes.append(image2bytes(image))
     return images_bytes
 
 
@@ -75,16 +79,12 @@ def generate_image(gen_image: GenImage):
     negative_prompt = [gen_image.negative_prompt] * jax.device_count()
     neg_prompt_ids = pipeline.prepare_inputs(negative_prompt)
 
-    p_params = replicate(params)
     prompt_ids = shard(prompt_ids)
     neg_prompt_ids = shard(neg_prompt_ids)
 
     seed = random.randint(0, 2147483647)
     rng = create_key(seed)
     rng = jax.random.split(rng, jax.device_count())
-
-    print("Generating images...")
-    start = datetime.now()
     images = pipeline(
         prompt_ids=prompt_ids,
         params=p_params,
@@ -94,8 +94,8 @@ def generate_image(gen_image: GenImage):
         neg_prompt_ids=neg_prompt_ids,
         jit=True
     )[0]
-    gen_time = datetime.now() - start
-    print(f"Generated {len(images)} images in {gen_time}")
+
+    print(f"Time after generate {datetime.now() - request_start}")
 
     images = images.reshape((images.shape[0] * images.shape[1],) + images.shape[-3:])
     images = pipeline.numpy_to_pil(images)
