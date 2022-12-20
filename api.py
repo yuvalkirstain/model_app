@@ -66,6 +66,7 @@ def images2bytes(images):
 
 @app.post("/generate")
 def generate_image(gen_image: GenImage):
+    request_start = datetime.now()
     prompt = gen_image.prompt
     print(f"Prompt: {prompt}")
 
@@ -101,7 +102,7 @@ def generate_image(gen_image: GenImage):
 
     image_bytes = images2bytes(images)
     num_images = len(images)
-    return {
+    result = {
         "user_id": gen_image.user_id,
         "prompt": [gen_image.prompt] * num_images,
         "negative_prompt": [gen_image.negative_prompt] * num_images,
@@ -114,6 +115,9 @@ def generate_image(gen_image: GenImage):
         "model_id": MODEL_ID,
         "images": image_bytes,
     }
+    r_time = datetime.now() - request_start
+    print(f"Request handled in {len(images)} images in {r_time}")
+    return result
 
 
 @app.get("/")
