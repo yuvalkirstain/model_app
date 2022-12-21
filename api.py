@@ -83,7 +83,7 @@ def generate_image(gen_image: GenImage):
     neg_prompt_ids = shard(neg_prompt_ids)
 
     seed = random.randint(0, 2147483647)
-    n_steps = random.randint(20, 40)
+    n_steps = N_STEPS
     gs = random.uniform(6, 12)
     rng = create_key(seed)
     rng = jax.random.split(rng, jax.device_count())
