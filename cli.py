@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 app = typer.Typer()
 
-ZONES = ["europe-west4-a", "us-central1-f"]
+ZONES = ["us-central1-f", "europe-west4-a"]
 ZONE2TPU_TYPE = {
     "europe-west4-a": "v3-8",
     "us-central1-f": "v2-8",
