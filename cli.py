@@ -233,6 +233,7 @@ def prepare_backend_urls_env_vars_str():
         for tpu_name in tqdm(tpu_names):
             external_ip = get_external_ip_of_tpu(tpu_name, zone)
             env_vars_str.append(f"http://{external_ip}:5000/generate")
+            env_vars_str.append(f"http://{external_ip}:5001/generate")
     print(f"BACKEND_URLS={json.dumps(env_vars_str)}")
 
 

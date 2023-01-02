@@ -15,6 +15,7 @@ git pull
 # Start service
 echo "Starting service"
 fuser -k 5000/tcp
+fuser -k 5001/tcp
 tmux kill-server
 
 export TPU_CHIPS_PER_HOST_BOUNDS="1,2,1"
