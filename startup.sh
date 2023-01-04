@@ -20,7 +20,7 @@ fuser -k 5001/tcp
 tmux kill-server
 
 
-tmux new-session -d -s model_app_start 'export MODEL_ID="runwayml/stable-diffusion-v1-5"; export TPU_HOST_BOUNDS="1,1,1"; export TPU_CHIPS_PER_HOST_BOUNDS="1,2,1"; export TPU_VISIBLE_DEVICES="0,1"; export TPU_MESH_CONTROLLER_ADDRESS="localhost:8476"; export TPU_MESH_CONTROLLER_PORT="8476"; python3 -m gunicorn -t 300 -b :5000 -w 1 -k uvicorn.workers.UvicornWorker api:app'
+tmux new-session -d -s model_app_start 'export MODEL_ID="yuvalkirstain/ProtoGen_X3.4_flax"; export TPU_HOST_BOUNDS="1,1,1"; export TPU_CHIPS_PER_HOST_BOUNDS="1,2,1"; export TPU_VISIBLE_DEVICES="0,1"; export TPU_MESH_CONTROLLER_ADDRESS="localhost:8476"; export TPU_MESH_CONTROLLER_PORT="8476"; python3 -m gunicorn -t 300 -b :5000 -w 1 -k uvicorn.workers.UvicornWorker api:app'
 
 sleep 30
 
