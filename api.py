@@ -109,7 +109,7 @@ def generate_image(gen_image: GenImage):
         "negative_prompt": [gen_image.negative_prompt] * num_images,
         "seed": seed,
         "gs": gs,
-        "steps": n_steps,
+        "steps": N_STEPS,
         "idx": [i for i in range(num_images)],
         "num_generated": num_images,
         "scheduler_cls": scheduler.__class__.__name__,
