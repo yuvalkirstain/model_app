@@ -39,11 +39,15 @@ def is_preemptible(tpu_json: Dict):
     return tpu_json["schedulingConfig"].get("preemptible", False)
 
 
+def get_tpu_names_by_zone(zone: str):
+    tpus = json.loads(os_call(f"gcloud compute tpus list --zone {zone} --format json"))
+    tpu_names = [tpu['name'].split('/')[-1] for tpu in tpus]
+    return tpu_names
+
+
 def get_tpu_names(resource: Resource):
     zone = resource.zone
-    tpus = json.loads(os_call(f"gcloud compute tpus list --zone {zone} --format json"))
-    tpus = [tpu for tpu in tpus if (is_preemptible(tpu) if resource.is_preemptible else not is_preemptible(tpu))]
-    tpu_names = [tpu['name'].split('/')[-1] for tpu in tpus]
+    tpu_names = get_tpu_names_by_zone(zone)
     return tpu_names
 
 
@@ -202,7 +206,7 @@ def run_app(tpu_name: str, zone: str, username="yuvalkirstain"):
 def run_app_on_all_machines():
     for zone in get_zones():
         print(f"Zone {zone}:")
-        tpu_names = get_valid_tpu_names(zone)
+        tpu_names = get_tpu_names_by_zone(zone)
         for tpu_name in tpu_names:
             print(f"Running on {tpu_name}")
             run_app(tpu_name, zone)
