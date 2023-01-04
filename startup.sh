@@ -25,6 +25,6 @@ tmux new-session -d -s model_app_start 'export MODEL_ID="runwayml/stable-diffusi
 
 sleep 30
 
-tmux new-session -d -s model_app_end 'export MODEL_ID="stabilityai/stable-diffusion-2-1" export TPU_VISIBLE_DEVICES="2,3"; export TPU_MESH_CONTROLLER_ADDRESS="localhost:8477"; export TPU_MESH_CONTROLLER_PORT="8477"; python3 -m gunicorn -t 300 -b :5001 -w 1 -k uvicorn.workers.UvicornWorker api:app'
+tmux new-session -d -s model_app_end 'export MODEL_ID="stabilityai/stable-diffusion-2-1"; export TPU_VISIBLE_DEVICES="2,3"; export TPU_MESH_CONTROLLER_ADDRESS="localhost:8477"; export TPU_MESH_CONTROLLER_PORT="8477"; python3 -m gunicorn -t 300 -b :5001 -w 1 -k uvicorn.workers.UvicornWorker api:app'
 
 tmux ls
