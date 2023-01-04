@@ -1,5 +1,6 @@
 import base64
 import io
+import os
 import random
 from datetime import datetime
 from typing import Optional
@@ -14,9 +15,8 @@ from PIL import Image
 from diffusers import FlaxDPMSolverMultistepScheduler, FlaxStableDiffusionPipeline
 from pydantic import BaseModel
 
-MODEL_ID = "runwayml/stable-diffusion-v1-5"
+MODEL_ID = os.environ["MODEL_ID"]
 N_STEPS = 25
-GS = 7.5
 NEG_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy"
 
 app = FastAPI()
@@ -83,15 +83,14 @@ def generate_image(gen_image: GenImage):
     neg_prompt_ids = shard(neg_prompt_ids)
 
     seed = random.randint(0, 2147483647)
-    n_steps = N_STEPS
-    gs = random.uniform(6, 12)
+    gs = random.uniform(7, 9.5)
     rng = create_key(seed)
     rng = jax.random.split(rng, jax.device_count())
     images = pipeline(
         prompt_ids=prompt_ids,
         params=p_params,
         prng_seed=rng,
-        num_inference_steps=n_steps,
+        num_inference_steps=N_STEPS,
         guidance_scale=gs,
         neg_prompt_ids=neg_prompt_ids,
         jit=True
