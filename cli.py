@@ -229,8 +229,10 @@ def get_external_ips():
 def prepare_backend_urls_env_vars_str():
     env_vars_str = []
     for zone in get_zones():
+        print(f"Zone {zone}:")
         tpu_names = get_valid_tpu_names(zone)
-        for tpu_name in tqdm(tpu_names):
+        for tpu_name in tpu_names:
+            print(f"Adding {tpu_name=}")
             external_ip = get_external_ip_of_tpu(tpu_name, zone)
             env_vars_str.append(f"http://{external_ip}:5000/generate")
             env_vars_str.append(f"http://{external_ip}:5001/generate")

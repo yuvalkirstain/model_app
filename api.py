@@ -14,9 +14,9 @@ from PIL import Image
 from diffusers import FlaxDPMSolverMultistepScheduler, FlaxStableDiffusionPipeline
 from pydantic import BaseModel
 
-MODEL_ID = "stabilityai/stable-diffusion-2-1"
+MODEL_ID = "runwayml/stable-diffusion-v1-5"
 N_STEPS = 25
-GS = 9.0
+GS = 7.5
 NEG_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy"
 
 app = FastAPI()
