@@ -10,6 +10,7 @@ if [ ! -d "model_app" ]; then
 fi
 
 cd model_app
+git stash
 git pull
 
 # Start service
