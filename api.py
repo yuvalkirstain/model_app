@@ -115,7 +115,7 @@ def generate_image(gen_image: GenImage):
         "prompt": [gen_image.prompt] * num_images,
         "negative_prompt": [gen_image.negative_prompt] * num_images,
         "seed": seed,
-        "gs": gs,
+        "gs": jax.numpy.asarray(gs).tolist(),
         "steps": N_STEPS,
         "idx": [i for i in range(num_images)],
         "num_generated": num_images,
