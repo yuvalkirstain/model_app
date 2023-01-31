@@ -92,7 +92,7 @@ def generate_image(gen_image: GenImage):
     seed = random.randint(0, 2147483647)
     rng = create_key(seed)
     rng = jax.random.split(rng, jax.device_count())
-    gs = jax.random.uniform(key=rng, shape=(prompt_ids.shape[0],), minval=GS_START, maxval=GS_END)
+    gs = jnp.array([random.uniform(GS_START, GS_END) for _ in range(prompt_ids.shape[0])])
     images = pipeline(
         prompt_ids=prompt_ids,
         params=p_params,
@@ -115,7 +115,7 @@ def generate_image(gen_image: GenImage):
         "prompt": [gen_image.prompt] * num_images,
         "negative_prompt": [gen_image.negative_prompt] * num_images,
         "seed": seed,
-        "gs": jax.numpy.asarray(gs).tolist(),
+        "gs": gs.tolist(),
         "steps": N_STEPS,
         "idx": [i for i in range(num_images)],
         "num_generated": num_images,
