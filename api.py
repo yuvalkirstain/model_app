@@ -17,11 +17,11 @@ from pydantic import BaseModel
 
 MODEL_ID = os.environ["MODEL_ID"]
 if "2-1" in MODEL_ID:
-    GS_START = 7
-    GS_END = 9.5
-else:
     GS_START = 6
-    GS_END = 8.5
+    GS_END = 10
+else:
+    GS_START = 5
+    GS_END = 9
 
 N_STEPS = 25
 NEG_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy"
@@ -90,9 +90,9 @@ def generate_image(gen_image: GenImage):
     neg_prompt_ids = shard(neg_prompt_ids)
 
     seed = random.randint(0, 2147483647)
-    gs = random.uniform(GS_START, GS_END)
     rng = create_key(seed)
     rng = jax.random.split(rng, jax.device_count())
+    gs = jax.random.uniform(key=rng, shape=(prompt_ids.shape[0],), minval=GS_START, maxval=GS_END)
     images = pipeline(
         prompt_ids=prompt_ids,
         params=p_params,
