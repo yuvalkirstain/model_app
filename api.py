@@ -17,11 +17,11 @@ from pydantic import BaseModel
 
 MODEL_ID = os.environ["MODEL_ID"]
 if "2-1" in MODEL_ID:
-    GS_START = 6
+    GS_START = 3
     GS_END = 10
 else:
-    GS_START = 5
-    GS_END = 9
+    GS_START = 3
+    GS_END = 10
 
 N_STEPS = 25
 NEG_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy"
