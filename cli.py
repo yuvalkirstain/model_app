@@ -2,6 +2,7 @@ import json
 import os
 import subprocess
 from dataclasses import dataclass
+from time import sleep
 from typing import Dict
 
 import requests
@@ -211,6 +212,8 @@ def run_app_on_all_machines():
             print(f"Running on {tpu_name}")
             run_app(tpu_name, zone)
             print(f"Done running on {tpu_name}")
+            print("Sleeping for 20 seconds")
+            sleep(20)
 
 
 def get_external_ip_of_tpu(tpu_name: str, zone: str):
@@ -240,6 +243,9 @@ def prepare_backend_urls_env_vars_str():
             external_ip = get_external_ip_of_tpu(tpu_name, zone)
             env_vars_str.append(f"http://{external_ip}:5000/generate")
             env_vars_str.append(f"http://{external_ip}:5001/generate")
+            env_vars_str.append(f"http://{external_ip}:5002/generate")
+            env_vars_str.append(f"http://{external_ip}:5003/generate")
+
     print(f"BACKEND_URLS={json.dumps(env_vars_str)}")
 
 
