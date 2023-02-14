@@ -18,7 +18,7 @@ from pydantic import BaseModel
 MODEL_ID = os.environ["MODEL_ID"]
 
 GS_START = 3
-GS_END = 11
+GS_END = 12
 
 N_STEPS = 25
 NEG_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy"
